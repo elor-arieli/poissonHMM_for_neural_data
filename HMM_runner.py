@@ -2,6 +2,7 @@ from params_initialization import create_pi_array,create_transition_matrix,creat
 from get_data_from_files import get_and_merge_data_from_pickle_files_list
 from calc_params import *
 from re_estimation import *
+import pickle
 
 import os
 
@@ -28,11 +29,20 @@ class HMM_model(object):
         print("calculating first estimation")
         self.update_estimation_params()
         print("Model Initialized - but not yet optimized")
+
+
+    def run_hmm_multi_trial(self, amount_of_trials=100, epsilon=10**-4):
         self.optimal_models = []
+        for trial_num in range(1,amount_of_trials+1):
+            print("Running trial {} for local maxima identification".format(trial_num))
+            self.initialize_model_params()
+            self.update_estimation_params()
+            self.optimize_params(epsilon)
 
-
-    def run_hmm_multi_trial(self, amount_of_trials, epsilon=10**-4):
-        pass
+        self.optimal_models.sort(key=lambda x: x[0],reverse=True)
+        best_run = self.optimal_models[0]
+        self.best_fitting_model = best_run[2] # 0 - path probability, 1 - the state path, 2 - the model param dic
+        print("finished optimizing for {} local maxima and found the best path probability is: {}".format(amount_of_trials,best_run[0]))
 
 
     def initialize_model_params(self):
@@ -51,6 +61,8 @@ class HMM_model(object):
             print("Running Estimation-Maximization trial #{}".format(trial_num))
             self.update_model_params()
             self.update_estimation_params()
+
+        self.optimal_models.append((self.estimation_params["path prob"],self.estimation_params["best path"],self.model_params))
 
 
     def update_model_params(self):
@@ -79,3 +91,8 @@ class HMM_model(object):
         self.estimation_params["zetta"] = calc_zettas(self.estimation_params["alpha"], self.estimation_params["betta"],
                                                       self.model_params["Aij matrix"],
                                                       self.model_params["B matrix"], self.neural_data_matrix)
+
+
+    def save_model_to_file(self, filename):
+        with open(filename+".pkl", 'wb') as handle:
+            pickle.dump(self.best_fitting_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
