@@ -73,26 +73,67 @@ class HMM_model(object):
                                                         self.estimation_params["betta"],
                                                         self.neural_data_matrix)
 
-    def update_estimation_params(self):
-        self.estimation_params = {"alpha": calc_alphas(self.model_params["pi array"], self.model_params["Aij matrix"],
-                                                       self.model_params["B matrix"], self.neural_data_matrix),
-                                  "betta": calc_bettas(self.model_params["Aij matrix"],
-                                                       self.model_params["B matrix"], self.neural_data_matrix)}
+    def update_estimation_params(self,multi_trial=True,trial_num=None):
+        if multi_trial:
+            self.estimation_params = {"alpha": calc_alphas(self.model_params["pi array"], self.model_params["Aij matrix"],
+                                                           self.model_params["B matrix"], self.neural_data_matrix,multi_trial),
+                                      "betta": calc_bettas(self.model_params["Aij matrix"],
+                                                           self.model_params["B matrix"], self.neural_data_matrix,multi_trial)}
 
-        self.estimation_params["gamma"] = calc_gammas(self.estimation_params["alpha"], self.estimation_params["betta"])
-        lamdas, psi_array, path_prob, last_state, path = calc_lamdas_psi(self.model_params["pi array"],
-                                                                         self.model_params["Aij matrix"],
-                                                                         self.model_params["B matrix"],
-                                                                         self.neural_data_matrix)
-        self.estimation_params["lambda"] = lamdas
-        self.estimation_params["psi"] = psi_array
-        self.estimation_params["path prob"] = path_prob
-        self.estimation_params["best path"] = path
-        self.estimation_params["zetta"] = calc_zettas(self.estimation_params["alpha"], self.estimation_params["betta"],
-                                                      self.model_params["Aij matrix"],
-                                                      self.model_params["B matrix"], self.neural_data_matrix)
+            self.estimation_params["gamma"] = calc_gammas(self.estimation_params["alpha"], self.estimation_params["betta"])
+            lamdas, psi_array, path_prob, last_state, path = calc_lamdas_psi(self.model_params["pi array"],
+                                                                             self.model_params["Aij matrix"],
+                                                                             self.model_params["B matrix"],
+                                                                             self.neural_data_matrix,multi_trial)
+            self.estimation_params["lambda"] = lamdas
+            self.estimation_params["psi"] = psi_array
+            self.estimation_params["path prob"] = path_prob
+            self.estimation_params["best path"] = path
+            self.estimation_params["zetta"] = calc_zettas(self.estimation_params["alpha"], self.estimation_params["betta"],
+                                                          self.model_params["Aij matrix"],
+                                                          self.model_params["B matrix"], self.neural_data_matrix,multi_trial)
+        else:
+            self.estimation_params = {
+                "alpha": calc_alphas(self.model_params["pi array"], self.model_params["Aij matrix"],
+                                     self.model_params["B matrix"], self.neural_data_matrix[trial_num,:,:], multi_trial),
+                "betta": calc_bettas(self.model_params["Aij matrix"],
+                                     self.model_params["B matrix"], self.neural_data_matrix[trial_num,:,:], multi_trial)}
+
+            self.estimation_params["gamma"] = calc_gammas(self.estimation_params["alpha"],
+                                                          self.estimation_params["betta"])
+            lamdas, psi_array, path_prob, last_state, path = calc_lamdas_psi(self.model_params["pi array"],
+                                                                             self.model_params["Aij matrix"],
+                                                                             self.model_params["B matrix"],
+                                                                             self.neural_data_matrix[trial_num,:,:], multi_trial)
+            self.estimation_params["lambda"] = lamdas
+            self.estimation_params["psi"] = psi_array
+            self.estimation_params["path prob"] = path_prob
+            self.estimation_params["best path"] = path
+            self.estimation_params["zetta"] = calc_zettas(self.estimation_params["alpha"],
+                                                          self.estimation_params["betta"],
+                                                          self.model_params["Aij matrix"],
+                                                          self.model_params["B matrix"], self.neural_data_matrix[trial_num,:,:],
+                                                          multi_trial)
 
 
     def save_model_to_file(self, filename):
         with open(filename+".pkl", 'wb') as handle:
             pickle.dump(self.best_fitting_model, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def load_model_params_from_file(self,filename):
+        with (open(filename, "rb")) as openfile:
+            while True:
+                try:
+                    dic = pickle.load(openfile)
+                except EOFError:
+                    break
+        self.model_params = dic
+
+    def single_trial_tester(self,trial_num):
+        self.update_estimation_params(False,trial_num=trial_num)
+        return (self.estimation_params["path prob"],self.estimation_params["best path"],self.estimation_params["gamma"])
+
+    def multi_trial_tester(self):
+        all_trials = []
+        for trial in range(self.neural_data_matrix.shape[0]):
+            all_trials.append(self.single_trial_tester(trial))
