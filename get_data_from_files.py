@@ -56,5 +56,8 @@ def get_and_merge_data_from_pickle_files_list(directory, file_list, start_time_o
             dic['event_times'][taste] = [i for i in dic['event_times'][taste] if i>start_time_of_trials][:amount_of_trials_per_taste]
         matrice_list.append(create_trials_matrix(dic['neurons'], dic['event_times'],start_time, stop_time, bin_size, taste_list))
 
-    full_matrix = np.concatenate(matrice_list, axis=1)
+    if len(matrice_list) == 1:
+        full_matrix = matrice_list[0]
+    else:
+        full_matrix = np.concatenate(matrice_list, axis=1)
     return full_matrix

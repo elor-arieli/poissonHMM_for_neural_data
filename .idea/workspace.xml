@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2b5765a-28bf-45b3-a83a-28ddecfc04db" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/HMM_for_neural_data.iml" afterPath="$PROJECT_DIR$/.idea/HMM_for_neural_data.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HMM_runner.py" afterPath="$PROJECT_DIR$/HMM_runner.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/auxilary_functions.py" afterPath="$PROJECT_DIR$/auxilary_functions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/calc_params.py" afterPath="$PROJECT_DIR$/calc_params.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/get_data_from_files.py" afterPath="$PROJECT_DIR$/get_data_from_files.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,8 +28,8 @@
       <file leaf-file-name="params_initialization.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/params_initialization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-351">
-              <caret line="54" column="37" lean-forward="false" selection-start-line="54" selection-start-column="37" selection-end-line="54" selection-end-column="37" />
+            <state relative-caret-position="1925">
+              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -40,8 +40,8 @@
       <file leaf-file-name="auxilary_functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/auxilary_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="31" />
+            <state relative-caret-position="245">
+              <caret line="15" column="88" lean-forward="false" selection-start-line="15" selection-start-column="88" selection-end-line="15" selection-end-column="88" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -52,8 +52,8 @@
       <file leaf-file-name="calc_params.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calc_params.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="95" column="32" lean-forward="false" selection-start-line="95" selection-start-column="32" selection-end-line="95" selection-end-column="32" />
+            <state relative-caret-position="2475">
+              <caret line="99" column="79" lean-forward="true" selection-start-line="99" selection-start-column="79" selection-end-line="99" selection-end-column="79" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -61,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HMM_runner.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HMM_runner.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HMM_runner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2350">
-              <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+            <state relative-caret-position="175">
+              <caret line="13" column="25" lean-forward="true" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
               <folding>
                 <element signature="e#0#107#0" expanded="true" />
               </folding>
@@ -73,14 +73,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_data_from_files.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="get_data_from_files.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/get_data_from_files.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="924">
-              <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
+            <state relative-caret-position="1500">
+              <caret line="60" column="9" lean-forward="true" selection-start-line="60" selection-start-column="9" selection-end-line="60" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
               </folding>
             </state>
           </provider>
@@ -102,11 +101,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/params_initialization.py" />
-        <option value="$PROJECT_DIR$/auxilary_functions.py" />
         <option value="$PROJECT_DIR$/re_estimation.py" />
-        <option value="$PROJECT_DIR$/get_data_from_files.py" />
-        <option value="$PROJECT_DIR$/calc_params.py" />
         <option value="$PROJECT_DIR$/HMM_runner.py" />
+        <option value="$PROJECT_DIR$/auxilary_functions.py" />
+        <option value="$PROJECT_DIR$/calc_params.py" />
+        <option value="$PROJECT_DIR$/get_data_from_files.py" />
       </list>
     </option>
   </component>
@@ -464,7 +463,14 @@
       <option name="project" value="LOCAL" />
       <updated>1514282289696</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="finished writing function to run multi trials of the model with different initializations and choosing the best model.&#10;added function to save model params to file.">
+      <created>1514300229644</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1514300229645</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -544,7 +550,8 @@
     <MESSAGE value="updates poisson pron for all trial matrices&#10;added functions for alpha calc and basis for betta and gamma." />
     <MESSAGE value="added functions for calculating zetta" />
     <MESSAGE value="added functions for Re estimation of model parameters" />
-    <option name="LAST_COMMIT_MESSAGE" value="added functions for Re estimation of model parameters" />
+    <MESSAGE value="finished writing function to run multi trials of the model with different initializations and choosing the best model.&#10;added function to save model params to file." />
+    <option name="LAST_COMMIT_MESSAGE" value="finished writing function to run multi trials of the model with different initializations and choosing the best model.&#10;added function to save model params to file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -579,7 +586,6 @@
           <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -620,7 +626,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -651,7 +656,6 @@
           <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -702,7 +706,6 @@
           <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -733,7 +736,6 @@
           <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -774,28 +776,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auxilary_functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="4" column="31" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/get_data_from_files.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="40" column="133" lean-forward="false" selection-start-line="40" selection-start-column="133" selection-end-line="40" selection-end-column="133" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <marker date="1514297338323" expanded="true" signature="1563:3109" ph="..." />
           </folding>
         </state>
       </provider>
@@ -808,32 +788,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/calc_params.py">
+    <entry file="file://$PROJECT_DIR$/HMM_runner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="95" column="32" lean-forward="false" selection-start-line="95" selection-start-column="32" selection-end-line="95" selection-end-column="32" />
+        <state relative-caret-position="175">
+          <caret line="13" column="25" lean-forward="true" selection-start-line="13" selection-start-column="25" selection-end-line="13" selection-end-column="25" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/params_initialization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-351">
-          <caret line="54" column="37" lean-forward="false" selection-start-line="54" selection-start-column="37" selection-end-line="54" selection-end-column="37" />
+        <state relative-caret-position="1925">
+          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/HMM_runner.py">
+    <entry file="file://$PROJECT_DIR$/auxilary_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2350">
-          <caret line="94" column="0" lean-forward="true" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+        <state relative-caret-position="245">
+          <caret line="15" column="88" lean-forward="false" selection-start-line="15" selection-start-column="88" selection-end-line="15" selection-end-column="88" />
           <folding>
-            <element signature="e#0#107#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calc_params.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2475">
+          <caret line="99" column="79" lean-forward="true" selection-start-line="99" selection-start-column="79" selection-end-line="99" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/get_data_from_files.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1500">
+          <caret line="60" column="9" lean-forward="true" selection-start-line="60" selection-start-column="9" selection-end-line="60" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
