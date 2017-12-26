@@ -41,3 +41,20 @@ def get_data_from_pickle_files_directory(directory,start_time_of_trials=1200, am
                 dic['event_times'][taste] = [i for i in dic['event_times'][taste] if i>start_time_of_trials][:amount_of_trials_per_taste]
             matrices[filename] = create_trials_matrix(dic['neurons'], dic['event_times'],start_time, stop_time, bin_size, taste_list)
     return matrices
+
+
+def get_and_merge_data_from_pickle_files_list(directory, file_list, start_time_of_trials=1200, amount_of_trials_per_taste=18,start_time=-1, stop_time=4, bin_size=0.05, taste_list=('water','sugar','nacl','CA')):
+    matrice_list = []
+    for filename in file_list:
+        with (open(directory + "\\" + filename, "rb")) as openfile:
+            while True:
+                try:
+                    dic = pickle.load(openfile)
+                except EOFError:
+                    break
+        for taste in dic['event_times'].keys():
+            dic['event_times'][taste] = [i for i in dic['event_times'][taste] if i>start_time_of_trials][:amount_of_trials_per_taste]
+        matrice_list.append(create_trials_matrix(dic['neurons'], dic['event_times'],start_time, stop_time, bin_size, taste_list))
+
+    full_matrix = np.concatenate(matrice_list, axis=1)
+    return full_matrix

@@ -24,6 +24,7 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix):
             alphas[time,state_j] = sum_transition_probs*poisson_prob_population_vec(B_matrix[state_j,:],neural_data_matrix[:,:,time])
     return alphas
 
+
 def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix):
     # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
     # Aij matrix is a matrix where axis 0 is the state i from which we are leaving and axis 1 is state j to which we are going.
@@ -47,6 +48,7 @@ def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix):
 
     return bettas
 
+
 def calc_gammas(alphas, bettas):
     # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
     # Aij matrix is a matrix where axis 0 is the state i from which we are leaving and axis 1 is state j to which we are going.
@@ -63,6 +65,7 @@ def calc_gammas(alphas, bettas):
             gammas[time,state_i] = bettas[time,state_i]*alphas[time,state_i]/summation
 
     return gammas
+
 
 def calc_lamdas_psi(pi_array,Aij_matrix,B_matrix,neural_data_matrix):
     # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
