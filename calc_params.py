@@ -96,3 +96,23 @@ def calc_lamdas_psi(pi_array,Aij_matrix,B_matrix,neural_data_matrix):
         path[time] = psi_array[time+1,path[time+1]]
 
     return lamdas,psi_array,path_prob,last_state,path
+
+
+def calc_zettas(alphas,bettas,Aij_matrix,B_matrix,neural_data_matrix):
+    # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
+    # Aij matrix is a matrix where axis 0 is the state i from which we are leaving and axis 1 is state j to which we are going.
+    # neural data matrix axis are: 0 - trials, 1 - neurons, 2 - time points
+    # alphas and bettas are matrices where axis 0 - time and 1 - states
+
+    time_points = neural_data_matrix.shape[2]
+    num_of_states = B_matrix.shape[0]
+    zettas = np.zeros((time_points, num_of_states, num_of_states))  # axis 0 is times, axis 1 is states
+
+    for time in range(time_points-1):
+        for state_i in range(num_of_states):
+            for state_j in range(num_of_states):
+                zettas[time,state_i,state_j] = alphas[time,state_i] * Aij_matrix[state_i,state_j] * bettas[time+1,state_j]\
+                                               * poisson_prob_population_vec(B_matrix[state_j,:],neural_data_matrix[:,:,time+1])
+        zettas[time,:,:] = zettas[time,:,:] / zettas[time,:,:].sum()
+
+    return zettas
