@@ -6,7 +6,7 @@ def update_pi_array(gammas):
 
 
 def update_Aij_matrix(zettas, gammas):
-    num_of_states = gammas.shape[0]
+    num_of_states = gammas.shape[1]
     Aij_matrix = np.zeros((num_of_states,num_of_states))
 
     for state_i in range(num_of_states):

@@ -2,12 +2,12 @@ from params_initialization import create_pi_array,create_transition_matrix,creat
 from get_data_from_files import get_and_merge_data_from_pickle_files_list
 from calc_params import *
 from re_estimation import *
+from test_data_creator import create_fake_data_shenoy_model
 import pickle
-
 import os
 
 class HMM_model(object):
-    def __init__(self,file_list, directory=None, num_of_states=11, pi_array_method= "first five BL",
+    def __init__(self,file_list=None, directory=None, num_of_states=11, pi_array_method= "first five BL",
                 transition_matrix_type="shenoy", start_time_of_trials=1200, amount_of_trials_per_taste=18,
                 start_time=-1, stop_time=4, bin_size=0.05, taste_list=('water','sugar','nacl','CA')):
 
@@ -15,9 +15,12 @@ class HMM_model(object):
             directory = os.getcwd()
         print("Initiating HMM model")
         print("Getting data from files")
-        self.neural_data_matrix = get_and_merge_data_from_pickle_files_list(directory,file_list,start_time_of_trials,
+        if file_list:
+            self.neural_data_matrix = get_and_merge_data_from_pickle_files_list(directory,file_list,start_time_of_trials,
                                                                             amount_of_trials_per_taste,start_time,
                                                                             stop_time,bin_size,taste_list)
+        else:
+            self.neural_data_matrix = create_fake_data_shenoy_model()
 
         print("Initiating base model params")
         self.num_of_states = num_of_states
@@ -29,7 +32,6 @@ class HMM_model(object):
         print("calculating first estimation")
         self.update_estimation_params()
         print("Model Initialized - but not yet optimized")
-
 
     def run_hmm_multi_trial(self, amount_of_trials=100, epsilon=10**-4):
         self.optimal_models = []
@@ -51,12 +53,13 @@ class HMM_model(object):
                              "B matrix": create_B_matrix_poissonian_rates(self.neural_data_matrix)}
 
 
-    def optimize_params(self,epsilon=10**-4):
+    def optimize_params(self,epsilon=10**-3):
         print("Initiating model parameter optimization")
         last_path_prob = 0
 
         trial_num = 0
-        while np.abs(self.estimation_params["path prob"] - last_path_prob) > epsilon:
+        while np.abs(np.log(self.estimation_params["path prob"]) - last_path_prob) > epsilon:
+            last_path_prob = np.log(self.estimation_params["path prob"])
             trial_num += 1
             print("Running Estimation-Maximization trial #{}".format(trial_num))
             self.update_model_params()
@@ -137,3 +140,4 @@ class HMM_model(object):
         all_trials = []
         for trial in range(self.neural_data_matrix.shape[0]):
             all_trials.append(self.single_trial_tester(trial))
+        return all_trials

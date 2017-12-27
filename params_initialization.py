@@ -47,7 +47,7 @@ def create_transition_matrix(num_of_states, type='shenoy'):
                              [0,    0,    0,    0,    0,    0,    0,    0,    diag, nd_2, nd_2],
                              [0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    0],
                              [0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    1]]
-        return transition_matrix
+        return np.array(transition_matrix)
 
     else:
         raise SyntaxError("type is not valid, should be shenoy, F, FX or ATA")
