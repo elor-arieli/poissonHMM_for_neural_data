@@ -4,7 +4,7 @@ import random
 
 def create_transition_matrix(num_of_states, type='shenoy'):
     transition_matrix = np.zeros((num_of_states,num_of_states))
-    diag = random.uniform(0.9, 0.95)
+    diag = random.uniform(0.85, 0.9)
     if type == "FX":
         for i in range(num_of_states):
             for j in range(num_of_states):

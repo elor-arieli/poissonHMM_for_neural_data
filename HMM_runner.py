@@ -5,6 +5,7 @@ from re_estimation import *
 from test_data_creator import create_fake_data_shenoy_model
 import pickle
 import os
+from tqdm import tqdm
 
 class HMM_model(object):
     def __init__(self,file_list=None, directory=None, num_of_states=11, pi_array_method= "first five BL",
@@ -33,7 +34,7 @@ class HMM_model(object):
         self.update_estimation_params()
         print("Model Initialized - but not yet optimized")
 
-    def run_hmm_multi_trial(self, amount_of_trials=100, epsilon=10**-4):
+    def run_hmm_multi_trial(self, amount_of_trials=100, epsilon=10**-3):
         self.optimal_models = []
         for trial_num in range(1,amount_of_trials+1):
             print("Running trial {} for local maxima identification".format(trial_num))
@@ -55,16 +56,17 @@ class HMM_model(object):
 
     def optimize_params(self,epsilon=10**-3):
         print("Initiating model parameter optimization")
-        last_path_prob = 0
-
+        last_path_prob = -6
+        print((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)
         trial_num = 0
-        while np.abs(np.log(self.estimation_params["path prob"]) - last_path_prob) > epsilon:
-            last_path_prob = np.log(self.estimation_params["path prob"])
+        while np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob) > epsilon:
             trial_num += 1
             print("Running Estimation-Maximization trial #{}".format(trial_num))
+            print("Improvement from last time = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob)))
+            last_path_prob = np.log(self.estimation_params["path prob"])
             self.update_model_params()
             self.update_estimation_params()
-
+        print("Last Improvement = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)))
         self.optimal_models.append((self.estimation_params["path prob"],self.estimation_params["best path"],self.model_params))
 
 
@@ -139,5 +141,6 @@ class HMM_model(object):
     def multi_trial_tester(self):
         all_trials = []
         for trial in range(self.neural_data_matrix.shape[0]):
+            print("checking state path in trial {}".format(trial))
             all_trials.append(self.single_trial_tester(trial))
         return all_trials

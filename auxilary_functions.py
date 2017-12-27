@@ -10,10 +10,12 @@ def poisson_prob_population_vec(firing_rate_vec, spike_count_matrix):
     prob = 1
     if len(spike_count_matrix.shape) == 2:
         for neuron in range(spike_count_matrix.shape[1]):
+            prob_array = np.zeros(spike_count_matrix.shape[0])
             for trial in range(spike_count_matrix.shape[0]):
-                prob *= poisson_prob(firing_rate_vec[neuron],spike_count_matrix[trial,neuron])
+                prob_array[trial] = poisson_prob(firing_rate_vec[neuron],spike_count_matrix[trial,neuron])
+            prob *= prob_array.mean()
     else:
-        for neuron in range(spike_count_matrix.shape[1]):
+        for neuron in range(spike_count_matrix.shape[0]):
             prob *= poisson_prob(firing_rate_vec[neuron],spike_count_matrix[neuron])
     return prob
 

@@ -1,5 +1,6 @@
 import numpy as np
 from auxilary_functions import poisson_prob_population_vec
+from tqdm import tqdm
 
 def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True):
     # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
@@ -14,10 +15,13 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True
     alphas[0,:] = pi_array
 
     for state in range(num_of_states):
-        alphas[0,state] *= poisson_prob_population_vec(B_matrix[state,:],neural_data_matrix[:,:,0])
+        if multi_trial:
+            alphas[0,state] *= poisson_prob_population_vec(B_matrix[state,:],neural_data_matrix[:,:,0])
+        else:
+            alphas[0, state] *= poisson_prob_population_vec(B_matrix[state, :], neural_data_matrix[:, 0])
 
-    for time in range(1,time_points):
-        alphas[time-1,:] / alphas[time-1,:].sum() # normalize last stage to sum to 1
+    for time in tqdm(range(1,time_points),desc="calculating alphas"):
+        alphas[time-1,:] /= alphas[time-1,:].sum() # normalize last stage to sum to 1
         for state_j in range(num_of_states):
             sum_transition_probs = 0
 
@@ -30,7 +34,7 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True
             else:
                 alphas[time, state_j] = sum_transition_probs * poisson_prob_population_vec(B_matrix[state_j, :],
                                                                                            neural_data_matrix[:, time])
-
+    alphas[-1, :] /= alphas[-1, :].sum()  # normalize last stage to sum to 1
     return alphas
 
 
@@ -47,7 +51,7 @@ def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True):
     bettas = np.zeros((time_points, num_of_states))  # axis 0 is times, axis 1 is states
     bettas[-1, :] = np.ones(bettas.shape[1])
 
-    for time in range(time_points-2,-1,-1):
+    for time in tqdm(range(time_points-2,-1,-1),desc="calculating bettas"):
         for state_i in range(num_of_states):
             sum_transition_probs = 0
 
@@ -62,7 +66,7 @@ def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True):
                                             poisson_prob_population_vec(B_matrix[state_j, :],neural_data_matrix[:, time + 1])
 
             bettas[time, state_i] = sum_transition_probs
-        bettas[time, :] / bettas[time,:].sum()
+        bettas[time, :] /= bettas[time,:].sum()
 
     return bettas
 
@@ -76,7 +80,7 @@ def calc_gammas(alphas, bettas):
     num_of_states = alphas.shape[1]
     gammas = np.zeros((time_points, num_of_states))  # axis 0 is times, axis 1 is states
 
-    for time in range(time_points):
+    for time in tqdm(range(time_points),desc="calculating gammas"):
         summation = np.inner(alphas[time,:],bettas[time,:])
 
         for state_i in range(num_of_states):
@@ -104,7 +108,8 @@ def calc_lamdas_psi(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=
         else:
             lamdas[0, state] = pi_array[state] * poisson_prob_population_vec(B_matrix[state, :],neural_data_matrix[:, 0])
 
-    for time in range(1,time_points):
+    for time in tqdm(range(1,time_points),desc="calculating lamdas and psi"):
+        lamdas[time - 1, :] /= lamdas[time - 1, :].sum()  # normalize last stage to sum to 1
         for state_j in range(num_of_states):
             previous_lamdas_prob_array = np.zeros(num_of_states)
 
@@ -119,12 +124,13 @@ def calc_lamdas_psi(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=
                 lamdas[time, state_j] = previous_lamdas_prob_array.max() * \
                                         poisson_prob_population_vec(B_matrix[state_j, :],neural_data_matrix[:, time])
 
+    lamdas[-1, :] /= lamdas[-1, :].sum()  # normalize last stage to sum to 1
     path_prob = lamdas[-1,:].max()
     last_state = lamdas[-1,:].argmax()
     path = np.zeros(time_points)
     path[-1] = last_state
     for time in range(time_points-2,-1,-1):
-        path[time] = psi_array[time+1,path[time+1]]
+        path[time] = psi_array[time+1,int(path[time+1])]
 
     return lamdas,psi_array,path_prob,last_state,path
 
@@ -142,7 +148,7 @@ def calc_zettas(alphas,bettas,Aij_matrix,B_matrix,neural_data_matrix,multi_trial
     num_of_states = B_matrix.shape[0]
     zettas = np.zeros((time_points, num_of_states, num_of_states))  # axis 0 is times, axis 1 is states
 
-    for time in range(time_points-1):
+    for time in tqdm(range(time_points-1),desc="calculating zettas"):
         for state_i in range(num_of_states):
             for state_j in range(num_of_states):
                 if multi_trial:

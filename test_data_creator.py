@@ -3,7 +3,10 @@ from numpy.random import poisson, randint
 
 def create_fake_data_shenoy_model(amount_of_trials=72,amount_of_neurons=10):
     # trials, neurons, time
-    neural_rates_per_state = np.abs(np.random.normal(loc=5.0,scale=2.0,size=(11,amount_of_neurons)))
+    BL = np.abs(np.random.normal(loc=2.0,scale=3.0,size=(5,amount_of_neurons)))
+    iden = np.abs(np.random.normal(loc=5.0, scale=2.0, size=(4, amount_of_neurons)))
+    palat = np.abs(np.random.normal(loc=8.0, scale=2.5, size=(2, amount_of_neurons)))
+    neural_rates_per_state = np.concatenate((BL,iden,palat),axis=0)
 
     neural_data = np.zeros((amount_of_trials,amount_of_neurons,99))
     for trial in range(amount_of_trials):
