@@ -56,27 +56,42 @@ class HMM_model(object):
 
     def optimize_params(self,epsilon=10**-3):
         print("Initiating model parameter optimization")
-        last_path_prob = -6
-        print((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)
+        last_path_prob = 15
+        # print((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)
+        new_path_prob = self.calc_model_convergance()
         trial_num = 0
-        while np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob) > epsilon:
+        # while np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob) > epsilon:
+        while np.abs((new_path_prob - last_path_prob) / last_path_prob) > epsilon:
             trial_num += 1
             print("Running Estimation-Maximization trial #{}".format(trial_num))
-            print("Improvement from last time = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob)))
-            last_path_prob = np.log(self.estimation_params["path prob"])
+            # print("Improvement from last time = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob)/last_path_prob)))
+            print("Improvement from last time = {}".format((new_path_prob - last_path_prob) / last_path_prob))
+            # last_path_prob = np.log(self.estimation_params["path prob"])
             self.update_model_params()
             self.update_estimation_params()
-        print("Last Improvement = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)))
+            last_path_prob, new_path_prob = new_path_prob, self.calc_model_convergance()
+        # print("Last Improvement = {}".format(np.abs((np.log(self.estimation_params["path prob"]) - last_path_prob) / last_path_prob)))
+        print("Last Improvement = {}".format((new_path_prob - last_path_prob) / last_path_prob))
         self.optimal_models.append((self.estimation_params["path prob"],self.estimation_params["best path"],self.model_params))
+
+
+    def calc_model_convergance(self):
+        log_mat = np.log(self.estimation_params["alpha"])
+        print(log_mat)
+        log_mat[log_mat<-1E300] = 0
+        print(log_mat.sum(),log_mat)
+        return -1*log_mat.sum()
 
 
     def update_model_params(self):
         self.model_params["pi array"] = update_pi_array(self.estimation_params["gamma"])
         self.model_params["Aij matrix"] = update_Aij_matrix(self.estimation_params["zetta"],
                                                             self.estimation_params["gamma"])
-        self.model_params["B matrix"] = update_B_matrix(self.estimation_params["alpha"],
-                                                        self.estimation_params["betta"],
-                                                        self.neural_data_matrix)
+        # self.model_params["B matrix"] = update_B_matrix(self.estimation_params["alpha"],
+        #                                                 self.estimation_params["betta"],
+        #                                                 self.neural_data_matrix)
+
+        self.model_params["B matrix"] = update_B_matrix_2(self.estimation_params["gamma"],self.neural_data_matrix)
 
     def update_estimation_params(self,multi_trial=True,trial_num=None):
         if multi_trial:

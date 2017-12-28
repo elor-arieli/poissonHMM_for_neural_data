@@ -32,3 +32,21 @@ def update_B_matrix(alphas, bettas, neural_data_matrix):
                                      / np.inner(alphas[:,state],bettas[:,state])
 
     return B_matrix
+
+def update_B_matrix_2(gammas, neural_data_matrix):
+    # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
+    # neural data matrix axis are: 0 - trials, 1 - neurons, 2 - time points
+    # alphas and bettas are matrices where axis 0 - time and 1 - states
+    time_points = neural_data_matrix.shape[2]
+    num_of_states = gammas.shape[1]
+    num_of_neurons = neural_data_matrix.shape[1]
+    B_matrix = np.zeros((num_of_states, num_of_neurons)) # axis 0 is the state and axis 1 is the neuron
+    mean_trialed = neural_data_matrix.mean(axis=0)
+
+    for state in range(num_of_states):
+        state_gammas = gammas[:,state] # all gammas across time for this state
+        firing_probs = mean_trialed.dot(state_gammas)
+        normalized_firing_probs = firing_probs / state_gammas.sum()
+        B_matrix[state,:] = normalized_firing_probs
+
+    return B_matrix
