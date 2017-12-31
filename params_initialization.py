@@ -56,11 +56,11 @@ def create_B_matrix_poissonian_rates(neural_data_matrix):
     # return a matrix of states x neurons with the firing rate in every state.
     # neural data matrix axis are: 0 - trials, 1 - neurons, 2 - time points
     BL_state = neural_data_matrix[:,:,:20].mean(axis=2).mean(axis=0)
-    BL_state_1 = BL_state + np.random.normal(loc=BL_state.mean(), scale=2.0, size=len(BL_state))
-    BL_state_2 = BL_state + np.random.normal(loc=BL_state.mean(), scale=2.0, size=len(BL_state))
-    BL_state_3 = BL_state + np.random.normal(loc=BL_state.mean(), scale=2.0, size=len(BL_state))
-    BL_state_4 = BL_state + np.random.normal(loc=BL_state.mean(), scale=2.0, size=len(BL_state))
-    BL_state_5 = BL_state + np.random.normal(loc=BL_state.mean(), scale=2.0, size=len(BL_state))
+    BL_state_1 = BL_state + np.random.normal(loc=BL_state.mean(), scale=5.0, size=len(BL_state))
+    BL_state_2 = BL_state + np.random.normal(loc=BL_state.mean(), scale=5.0, size=len(BL_state))
+    BL_state_3 = BL_state + np.random.normal(loc=BL_state.mean(), scale=5.0, size=len(BL_state))
+    BL_state_4 = BL_state + np.random.normal(loc=BL_state.mean(), scale=5.0, size=len(BL_state))
+    BL_state_5 = BL_state + np.random.normal(loc=BL_state.mean(), scale=5.0, size=len(BL_state))
 
     water_state = neural_data_matrix[:18,   :, 20:40].mean(axis=2).mean(axis=0)
     water_state = water_state + np.random.normal(loc=water_state.mean(), scale=1.0, size=len(water_state))
@@ -80,7 +80,7 @@ def create_B_matrix_poissonian_rates(neural_data_matrix):
     good_palatability = neural_data_matrix[36:54, :, 40:70].mean(axis=2).mean(axis=0)
     good_palatability = good_palatability + np.random.normal(loc=good_palatability.mean(), scale=1.0, size=len(good_palatability))
     bad_palatability = neural_data_matrix[54:,   :, 40:70].mean(axis=2).mean(axis=0)
-    bad_palatability = bad_palatability + np.random.normal(loc=bad_palatability.mean(), scale=1.0, size=len(bad_palatability))
+    bad_palatability = bad_palatability + np.random.normal(loc=bad_palatability.mean(), scale=10.0, size=len(bad_palatability))
 
     # return a matrix where axis 0 is the state and axis 1 is the neuron
     return np.abs(np.vstack((BL_state_1,BL_state_2,BL_state_3,BL_state_4,BL_state_5,water_state,nacl_state,sugar_state,ca_state,good_palatability,bad_palatability)))
