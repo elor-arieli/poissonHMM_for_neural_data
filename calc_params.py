@@ -13,6 +13,7 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True
     num_of_states = B_matrix.shape[0]
     alphas = np.zeros((time_points,num_of_states)) # axis 0 is times, axis 1 is states
     alphas[0,:] = pi_array
+    C_array = np.zeros(time_points)
 
     for state in range(num_of_states):
         if multi_trial:
@@ -21,24 +22,32 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True
             alphas[0, state] *= poisson_prob_population_vec(B_matrix[state, :], neural_data_matrix[:, 0])
 
     for time in tqdm(range(1,time_points),desc="calculating alphas"):
+        C_array[time-1] = alphas[time-1,:].sum()
         alphas[time-1,:] /= alphas[time-1,:].sum() # normalize last stage to sum to 1
-        for state_j in range(num_of_states):
+        for state_i in range(num_of_states):
             sum_transition_probs = 0
 
-            for state_i in range(num_of_states):
-                sum_transition_probs += alphas[time-1,state_i]*Aij_matrix[state_i,state_j]
+            for state_j in range(num_of_states):
 
-            if multi_trial:
-                alphas[time, state_j] = sum_transition_probs * poisson_prob_population_vec(B_matrix[state_j, :],
-                                                                                           neural_data_matrix[:, :, time])
-            else:
-                alphas[time, state_j] = sum_transition_probs * poisson_prob_population_vec(B_matrix[state_j, :],
+
+                if multi_trial:
+                    # print("****************************************")
+                    # print("time: {}, state i: {}, state j: {}".format(time,state_i,state_j))
+                    # print(alphas[time - 1, state_j])
+                    # print(Aij_matrix[state_i, state_j])
+                    # print(poisson_prob_population_vec(B_matrix[state_i, :],neural_data_matrix[:, :, time]))
+                    sum_transition_probs += alphas[time - 1, state_j] * Aij_matrix[state_j, state_i] * poisson_prob_population_vec(B_matrix[state_i, :],
+                                                                                               neural_data_matrix[:, :, time])
+                else:
+                    sum_transition_probs += alphas[time - 1, state_j] * Aij_matrix[state_j, state_i] * poisson_prob_population_vec(B_matrix[state_i, :],
                                                                                            neural_data_matrix[:, time])
+            alphas[time,state_i] = sum_transition_probs
+    C_array[-1] = alphas[-1, :].sum()
     alphas[-1, :] /= alphas[-1, :].sum()  # normalize last stage to sum to 1
-    return alphas
+    return alphas,C_array
 
 
-def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True):
+def calc_bettas(Aij_matrix,B_matrix,alphas,C_array, neural_data_matrix,multi_trial=True):
     # B matrix is a matrix where axis 0 is the state and axis 1 is the neuron
     # Aij matrix is a matrix where axis 0 is the state i from which we are leaving and axis 1 is state j to which we are going.
     # neural data matrix axis are: 0 - trials, 1 - neurons, 2 - time points
@@ -66,7 +75,12 @@ def calc_bettas(Aij_matrix,B_matrix,neural_data_matrix,multi_trial=True):
                                             poisson_prob_population_vec(B_matrix[state_j, :],neural_data_matrix[:, time + 1])
 
             bettas[time, state_i] = sum_transition_probs
-        bettas[time, :] /= bettas[time,:].sum()
+
+        # print(alphas[time, :])
+        print(C_array[time])
+        print(bettas[time, :])
+        print(bettas[time, :] / C_array[time])
+        bettas[time, :] /= C_array[time]
 
     return bettas
 

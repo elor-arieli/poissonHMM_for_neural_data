@@ -19,17 +19,18 @@ def create_fake_data_shenoy_model(amount_of_trials=72,amount_of_neurons=10):
             trial_state_path[first_state_start:second_state_start] = 5
             trial_state_path[second_state_start:] = 9
         elif trial<36:
-            trial_state_path[first_state_start:second_state_start] = 6
+            trial_state_path[first_state_start:second_state_start] = 5
             trial_state_path[second_state_start:] = 9
         elif trial<54:
-            trial_state_path[first_state_start:second_state_start] = 7
+            trial_state_path[first_state_start:second_state_start] = 5
             trial_state_path[second_state_start:] = 9
         else:
-            trial_state_path[first_state_start:second_state_start] = 8
-            trial_state_path[second_state_start:] = 10
+            trial_state_path[first_state_start:second_state_start] = 5
+            trial_state_path[second_state_start:] = 9
 
         for time in range(99):
             # print(poisson(neural_rates_per_state[trial_state_path[time],:]))
             neural_data[trial,:,time] = poisson(neural_rates_per_state[trial_state_path[time],:])
-
+    print("actual neural rates")
+    print(neural_rates_per_state)
     return neural_data
