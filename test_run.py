@@ -1,7 +1,8 @@
 from HMM_runner import HMM_model
-
+from time import time,strftime,gmtime
+# model = HMM_model(["EA54 pre cta only taste responsive neuron dic.pkl"])
 model = HMM_model()
-# model.load_model_params_from_file("D:\\Users\\AnanM4\\PycharmProjects\\HMM_for_neural_data\\test_model_V5_same_trials.pkl")
+# model.load_model_params_from_file("D:\\Users\\AnanM4\\PycharmProjects\\HMM_for_neural_data\\real_data_V1_EA56_PRE.pkl")
 # print("model pi array:")
 # print(model.model_params["pi array"])
 # print("model Aij matrix:")
@@ -11,15 +12,19 @@ model = HMM_model()
 # for key in model.estimation_params.keys():
 #     print("model {}".format(key))
 #     print(model.estimation_params[key])
-
-model.run_hmm_multi_trial(amount_of_trials=1)
-model.save_model_to_file("D:\\Users\\AnanM4\\PycharmProjects\\HMM_for_neural_data\\test_model_V6_same_trials_betta normalized with alphas and path with gammas")
-print("model B matrix:")
-print(model.model_params["B matrix"])
+print("starting timer")
+t0 = time()
+model.run_hmm_multi_trial(amount_of_trials=20)
+total_run_time = strftime('%H:%M:%S', gmtime(time()-t0))
+# print("total rum time = {0:02f} minutes".format((time()-t0)/60.0))
+print("total rum time = {}".format(total_run_time))
+model.save_model_to_file("D:\\Users\\AnanM4\\PycharmProjects\\HMM_for_neural_data\\fake_more_real_maybe")
+# print("model B matrix:")
+# print(model.model_params["B matrix"])
 
 # all_trials = model.multi_trial_tester()
 #
-all_trials = [model.single_trial_tester(i) for i in range(5)]
+all_trials = [model.single_trial_tester(i) for i in range(72)]
 i = 0
 for tri in all_trials:
 

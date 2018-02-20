@@ -31,21 +31,23 @@ def calc_alphas(pi_array,Aij_matrix,B_matrix,neural_data_matrix,trial_num=False)
 
                 for state_j in range(num_of_states):
 
-
-                    if trial_num:
                         # print("****************************************")
                         # print("time: {}, state i: {}, state j: {}".format(time,state_i,state_j))
                         # print(alphas[time - 1, state_j])
                         # print(Aij_matrix[state_i, state_j])
                         # print(poisson_prob_population_vec(B_matrix[state_i, :],neural_data_matrix[:, :, time]))
-                        sum_transition_probs += alphas[trial,time - 1, state_j] * Aij_matrix[state_j, state_i] * poisson_prob_population_vec(B_matrix[state_i, :],
+                    sum_transition_probs += alphas[trial,time - 1, state_j] * Aij_matrix[state_j, state_i]
+
+                if trial_num:
+                    alphas[trial, time, state_i] = sum_transition_probs * poisson_prob_population_vec(B_matrix[state_i, :],
                                                                                                    neural_data_matrix[trial_num, :, time])
-                    else:
-                        sum_transition_probs += alphas[trial,time - 1, state_j] * Aij_matrix[state_j, state_i] * poisson_prob_population_vec(B_matrix[state_i, :],
+                else:
+                    alphas[trial, time, state_i] = sum_transition_probs * poisson_prob_population_vec(B_matrix[state_i, :],
                                                                                                neural_data_matrix[trial,:, time])
-                alphas[trial,time,state_i] = sum_transition_probs
         C_array[trial,-1] = alphas[trial,-1, :].sum()
         alphas[trial,-1, :] /= alphas[trial,-1, :].sum()  # normalize last stage to sum to 1
+        alphas[np.isnan(alphas)] = 0
+        C_array[np.isnan(C_array)] = 0
     return alphas,C_array
 
 
@@ -78,6 +80,9 @@ def calc_bettas(Aij_matrix,B_matrix,alphas,C_array, neural_data_matrix,trial_num
                                                 Aij_matrix[state_i, state_j] * \
                                                 poisson_prob_population_vec(B_matrix[state_j, :],neural_data_matrix[trial,:, time + 1])
 
+
+                if np.isnan(sum_transition_probs):
+                    print()
                 bettas[trial,time, state_i] = sum_transition_probs
 
             # print(alphas[time, :])
@@ -85,7 +90,7 @@ def calc_bettas(Aij_matrix,B_matrix,alphas,C_array, neural_data_matrix,trial_num
             # print(bettas[trial,time, :])
             # print(bettas[trial,time, :] / C_array[trial,time])
             bettas[trial,time, :] /= C_array[trial,time]
-
+    bettas[np.isnan(bettas)] = 0
     return bettas
 
 
@@ -98,11 +103,12 @@ def calc_gammas(alphas, bettas):
     gammas = np.zeros((num_of_trials,time_points, num_of_states))  # axis 0 is times, axis 1 is states
     for trial in tqdm(range(num_of_trials),desc="calculating gammas"):
         for time in range(time_points):
-            summation = np.inner(alphas[trial,time,:],bettas[trial,time,:])
+            # summation = np.inner(alphas[trial,time,:],bettas[trial,time,:])
 
             for state_i in range(num_of_states):
-                gammas[trial,time,state_i] = bettas[trial,time,state_i]*alphas[trial,time,state_i]/summation
-
+                # gammas[trial,time,state_i] = bettas[trial,time,state_i]*alphas[trial,time,state_i]/summation
+                gammas[trial, time, state_i] = bettas[trial, time, state_i] * alphas[trial, time, state_i]
+    gammas[np.isnan(gammas)] = 0
     return gammas
 
 
@@ -178,6 +184,6 @@ def calc_zettas(alphas,bettas,Aij_matrix,B_matrix,neural_data_matrix,trial_num=F
                                                          bettas[trial,time + 1, state_j] * \
                                                          poisson_prob_population_vec(B_matrix[state_j, :],neural_data_matrix[trial,:, time + 1])
 
-            zettas[trial,time,:,:] = zettas[trial,time,:,:] / zettas[trial,time,:,:].sum()
-
+            # zettas[trial,time,:,:] = zettas[trial,time,:,:] / zettas[trial,time,:,:].sum()
+    zettas[np.isnan(zettas)] = 0
     return zettas
